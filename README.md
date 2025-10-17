@@ -59,3 +59,9 @@ This ensures faster pickups, less food spoilage, and optimized distribution.
     python donation_priority.py
 
 
+    Live Link:
+    Application: https://hunger-bridge.onrender.com
+    ML Server: https://donationserver-1.onrender.com
+    Demo Video: 
+
+
