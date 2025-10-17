@@ -53,9 +53,9 @@ export const donorRequest = async (req, res) => {
     
     if (!lat || !lon) {
       // FIX: Added custom User-Agent to comply with Nominatim policy and avoid 403 error.
+      // Now using the user's specific email address for compliance.
       const nominatimHeaders = {
-        'User-Agent': 'HungerBridge-Donation-Service/1.0 (contact@yourappdomain.com)' 
-        // IMPORTANT: Replace the dummy email with a real contact email for your service.
+        'User-Agent': 'HungerBridge-Donation-Service/1.0 (sarvesh221160@gmail.com)' 
       };
 
       const geoRes = await axios.get(
