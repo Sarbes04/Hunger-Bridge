@@ -17,7 +17,7 @@ np.random.seed(42)
 
 data = []
 
-food_types = list(food_type_encoding.keys())
+food_types = list(food_type_encoding.keys()) # ["cooked","dry"..]
 
 for _ in range(500):  # 500 samples
     food_type = np.random.choice(food_types)
