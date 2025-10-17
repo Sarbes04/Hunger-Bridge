@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
+  
   baseURL: "https://hunger-bridge.onrender.com",
   headers: {
     "Content-Type": "application/json",
@@ -13,6 +14,7 @@ axiosInstance.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  console.log("error checkpoint 1");
   return config;
 });
 
