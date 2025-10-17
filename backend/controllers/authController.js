@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import axios from "axios";
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
+
 export const registerUser = async (req, res) => {
   const { name, phoneNumber, email, password, role, location } = req.body;
   try {
@@ -15,9 +16,11 @@ export const registerUser = async (req, res) => {
         : await Receiver.findOne({ email });
     if (existingUser)
       return res.status(400).json({ message: "User already exists" });
+      
     const hashedPassword = await bcrypt.hash(password, 10);
     let newUser;
     let lat,lon;
+    
     if (role === "donor") {
       newUser = await Donor.create({
         name,
@@ -31,12 +34,22 @@ export const registerUser = async (req, res) => {
           .status(400)
           .json({ message: "Address is required for receivers" });
       }
+      
+      // --- FIX APPLIED FOR NOMINATIM 403 ERROR ---
       if (!lat || !lon) {
+        // Added custom User-Agent to comply with Nominatim policy.
+        const nominatimHeaders = {
+          'User-Agent': 'HungerBridge-Registration-Service/1.0 (sarvesh221160@gmail.com)' 
+        };
+        
         const geoRes = await axios.get(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`
-      );
-        const geoData = await geoRes.data;
-        console.log(geoData);
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`,
+          { headers: nominatimHeaders } // Passing the required header
+        );
+        
+        const geoData = geoRes.data;
+        console.log("Nominatim Response Data:", geoData);
+        
         if (geoData.length > 0) {
           lat = geoData[0].lat;
           lon = geoData[0].lon;
@@ -44,6 +57,8 @@ export const registerUser = async (req, res) => {
           throw new Error("Could not geocode address to lat/lon");
         }
       }
+      // --- END FIX ---
+      
       newUser = await Receiver.create({
         name,
         phoneNumber,
@@ -63,6 +78,7 @@ export const registerUser = async (req, res) => {
 
     res.status(201).json({ user: newUser, token });
   } catch (error) {
+    console.error("Registration Error:", error);
     res
       .status(500)
       .json({ message: "Registration failed", error: error.message });
