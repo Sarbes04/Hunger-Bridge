@@ -6,8 +6,10 @@ import cors from "cors";
 import authRouter from "./routes/authRoutes.js";
 import donorRouter from "./routes/donorRoutes.js";
 import receiverRouter from "./routes/receiverRoutes.js";
+import path from "path";
 const app = express();
 const PORT = process.env.PORT || 4000;
+const _dirname = path.resolve();
 app.use(cors());
 app.use(express.json());
 
@@ -20,6 +22,10 @@ app.listen(PORT, () => {
   connectDb();
 });
 
+app.use(express.static(path.join(_dirname, "/frontend/dist")));
+app.get('/', (_,res)=>{
+  res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"));
+});
 
 export const connectDb = async () => {
   try {
