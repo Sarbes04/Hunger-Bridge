@@ -67,7 +67,7 @@ export const donorRequest = async (req, res) => {
 
     let mlResponse;
     try {
-      const mlServiceUrl = "https://donationserver-1.onrender.com/predict-urgency";
+      const mlServiceUrl = "http://donationserver-1.onrender.com/predict-urgency";
       const requestData = {
         food_type: foodType,
         quantity: approxPeople,
