@@ -50,12 +50,22 @@ export const donorRequest = async (req, res) => {
     let lat = latitude;
     let lon = longitude;
     console.log(lat);
+    
     if (!lat || !lon) {
+      // FIX: Added custom User-Agent to comply with Nominatim policy and avoid 403 error.
+      const nominatimHeaders = {
+        'User-Agent': 'HungerBridge-Donation-Service/1.0 (contact@yourappdomain.com)' 
+        // IMPORTANT: Replace the dummy email with a real contact email for your service.
+      };
+
       const geoRes = await axios.get(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`,
+        { headers: nominatimHeaders }
       );
-      console.log(geoRes);
-      const geoData = await geoRes.data;
+      
+      console.log("Nominatim Geocoding Response Status:", geoRes.status);
+      
+      const geoData = geoRes.data; // Already parsed by Axios
       if (geoData.length > 0) {
         lat = geoData[0].lat;
         lon = geoData[0].lon;
@@ -68,6 +78,8 @@ export const donorRequest = async (req, res) => {
 
     let mlResponse;
     try {
+      // Note: Using the internal service name 'http://donationserver-1.onrender.com' is good, 
+      // but ensure this is secure and correctly configured for internal requests in Render.
       const mlServiceUrl = "http://donationserver-1.onrender.com/predict-urgency";
       const requestData = {
         food_type: foodType,
