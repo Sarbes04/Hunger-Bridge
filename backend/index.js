@@ -10,7 +10,12 @@ import path from "path";
 const app = express();
 const PORT = process.env.PORT || 4000;
 const _dirname = path.resolve();
-app.use(cors());
+const corsOptions = {
+    //allows the end domain to access the server's resources
+    origin:"https://hunger-bridge.onrender.com/",
+    credentials:true
+}
+app.use(cors(corsOptions));
 app.use(express.json());
 
 
