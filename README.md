@@ -7,7 +7,7 @@
 - Post surplus food with details like quantity, pickup location, and time.
 - NGOs can browse available food listings and volunteer for pickups.
 - Smart AI-based model suggests the most efficient NGO for each donation based on factors like distance, capacity, and response time.
-- **Hall of Fame**: Donors are recognized and featured on the platform to encourage and motivate others.
+- **Hall of Fame**: Donors are recognized and featured on the platform to encourage and Motivate others.
 
 ## 🛠️ Tech Stack
 - **Frontend**: React.js, Tailwind CSS
